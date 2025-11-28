@@ -34,7 +34,7 @@ const CallListItem = ({ call, onClick }: CallListItemProps) => {
   const CallIcon = call.status === 'missed' ? PhoneMissed : call.direction === 'incoming' ? PhoneIncoming : PhoneOutgoing;
 
   return (
-    <button onClick={onClick} className="ios-list-item w-full text-left">
+    <div className="ios-list-item w-full text-left">
       <Avatar
         src={call.participant.avatar}
         alt={call.participant.name}
@@ -65,7 +65,13 @@ const CallListItem = ({ call, onClick }: CallListItemProps) => {
         <span className="text-sm text-muted-foreground">
           {getTimeString(call.timestamp)}
         </span>
-        <button className="p-2 text-primary active:opacity-70">
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick();
+          }}
+          className="p-2 text-primary active:opacity-70"
+        >
           {call.type === 'video' ? (
             <Video className="w-5 h-5" />
           ) : (
@@ -73,7 +79,7 @@ const CallListItem = ({ call, onClick }: CallListItemProps) => {
           )}
         </button>
       </div>
-    </button>
+    </div>
   );
 };
 

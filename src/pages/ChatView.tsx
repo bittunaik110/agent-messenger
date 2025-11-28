@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { Chat, Message } from '@/types/messenger';
 import { mockMessages } from '@/data/mockData';
+import { useCall } from '@/contexts/CallContext';
 import ChatHeader from '@/components/ChatHeader';
 import MessageBubble from '@/components/MessageBubble';
 import MessageInput from '@/components/MessageInput';
 import Avatar from '@/components/Avatar';
+import { toast } from 'sonner';
 
 interface ChatViewProps {
   chat: Chat;
@@ -15,6 +17,7 @@ const ChatView = ({ chat, onBack }: ChatViewProps) => {
   const participant = chat.participants[0];
   const [messages, setMessages] = useState<Message[]>(mockMessages[chat.id] || []);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { startCall } = useCall();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -39,8 +42,14 @@ const ChatView = ({ chat, onBack }: ChatViewProps) => {
     }, 1000);
   };
 
-  const handleCall = (type: 'voice' | 'video') => {
-    console.log(`Starting ${type} call with ${participant.name}`);
+  const handleCall = async (type: 'voice' | 'video') => {
+    try {
+      toast.info(`Starting ${type} call with ${participant.name}...`);
+      await startCall(participant, type);
+    } catch (error) {
+      console.error('Failed to start call:', error);
+      toast.error('Failed to start call. Please check your microphone/camera permissions.');
+    }
   };
 
   // Group messages for avatar display
