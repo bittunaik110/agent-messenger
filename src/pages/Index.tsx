@@ -1,12 +1,34 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { Chat, TabType } from '@/types/messenger';
+import BottomNav from '@/components/BottomNav';
+import ChatsPage from './ChatsPage';
+import CallsPage from './CallsPage';
+import SettingsPage from './SettingsPage';
+import ChatView from './ChatView';
 
 const Index = () => {
+  const [activeTab, setActiveTab] = useState<TabType>('chats');
+  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
+
+  // If a chat is selected, show the chat view
+  if (selectedChat) {
+    return (
+      <ChatView
+        chat={selectedChat}
+        onBack={() => setSelectedChat(null)}
+      />
+    );
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      {activeTab === 'chats' && (
+        <ChatsPage onChatSelect={setSelectedChat} />
+      )}
+      {activeTab === 'calls' && <CallsPage />}
+      {activeTab === 'settings' && <SettingsPage />}
+
+      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );
 };

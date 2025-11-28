@@ -1,0 +1,17 @@
+{
+  "name": "Messenger",
+  "short_name": "Messenger",
+  "description": "Mobile-first iOS-style messenger with real-time chat and video calls",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0084ff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}
